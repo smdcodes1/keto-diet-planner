@@ -57,7 +57,9 @@ export default function LoginPage() {
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
            <div className="mx-auto mb-4">
+            <Link href="/">
              <Logo />
+            </Link>
            </div>
           <CardTitle className="font-headline">Welcome Back</CardTitle>
           <CardDescription>Enter your credentials to access your account.</CardDescription>

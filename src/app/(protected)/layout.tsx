@@ -58,7 +58,9 @@ export default function ProtectedLayout({ children }: { children: ReactNode }) {
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader>
-          <Logo />
+          <Link href="/dashboard">
+            <Logo />
+          </Link>
         </SidebarHeader>
         <SidebarContent>
           <SidebarMenu>

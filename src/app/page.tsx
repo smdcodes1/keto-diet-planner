@@ -8,7 +8,7 @@ export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <header className="px-4 lg:px-6 h-16 flex items-center border-b">
-        <Link href="#" className="flex items-center justify-center">
+        <Link href="/" className="flex items-center justify-center">
           <Logo />
         </Link>
         <nav className="ml-auto flex gap-4 sm:gap-6">

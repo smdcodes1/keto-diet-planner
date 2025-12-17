@@ -57,7 +57,9 @@ export default function SignupPage() {
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
           <div className="mx-auto mb-4">
+            <Link href="/">
              <Logo />
+            </Link>
            </div>
           <CardTitle className="font-headline">Create an Account</CardTitle>
           <CardDescription>Start your keto journey with KetoPilot today.</CardDescription>
