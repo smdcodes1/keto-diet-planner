@@ -14,13 +14,16 @@ import {
 import { useAuth } from "@/lib/firebase/auth";
 import { LogOut, Settings, User } from "lucide-react";
 import { useRouter } from "next/navigation";
+import {signOut} from "firebase/auth";
+import { useFirebase } from "@/lib/firebase/firebaseContext";
 
 export function UserNav() {
-  const { user, logout } = useAuth();
+  const { user} = useAuth();
+  const { auth }= useFirebase();
   const router = useRouter();
 
   const handleLogout = async () => {
-    await logout();
+    await signOut(auth);
     router.push("/");
   };
 

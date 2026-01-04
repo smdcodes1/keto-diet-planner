@@ -20,35 +20,48 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/lib/firebase/auth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Logo } from "@/components/logo";
+import { useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useFirebase } from "@/lib/firebase/firebaseContext";
 
-const formSchema = z.object({
-  email: z.string().email({ message: "Invalid email address." }),
-  password: z.string().min(6, { message: "Password must be at least 6 characters." }),
-});
+// const formSchema = z.object({
+//   email: z.string().email({ message: "Invalid email address." }),
+//   password: z.string().min(6, { message: "Password must be at least 6 characters." }),
+// });
 
 export default function LoginPage() {
+  const [email,setEmail]= useState('');
+  const [password,setPassword]= useState('');
+  const [loading,setLoading]= useState(false);
   const router = useRouter();
-  const { login } = useAuth();
+  // const { login } = useAuth();
+  const { auth }= useFirebase();
   const { toast } = useToast();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
+  // const form = useForm<z.infer<typeof formSchema>>({
+  //   resolver: zodResolver(formSchema),
+  //   defaultValues: {
+  //     email: "",
+  //     password: "",
+  //   },
+  // });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
     try {
-      await login(values.email, values.password);
-      router.push("/dashboard");
+      await signInWithEmailAndPassword(auth, email, password).then(()=> {
+        console.log("login successfull");
+        router.push("/dashboard");
+      });
     } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Login Failed",
         description: error.message || "An unexpected error occurred.",
       });
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -65,7 +78,7 @@ export default function LoginPage() {
           <CardDescription>Enter your credentials to access your account.</CardDescription>
         </CardHeader>
         <CardContent>
-          <Form {...form}>
+          {/* <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
@@ -97,7 +110,21 @@ export default function LoginPage() {
                 {form.formState.isSubmitting ? "Signing In..." : "Sign In"}
               </Button>
             </form>
-          </Form>
+          </Form> */}
+          <form className="space-y-4" onSubmit={handleSubmit}>
+          <input type="email" placeholder='Enter your email' value={email}
+            onChange={(e)=> setEmail(e.target.value)}
+            className="text-black border border-gray-400 p-2 rounded-md w-full"
+            required />
+          <input type="password" placeholder='Enter your password' value={password}
+            onChange={(e)=> setPassword(e.target.value)}
+            className="text-black border border-gray-400 p-2 rounded-md w-full" 
+            required 
+            minLength={4} />
+          <button type='submit' disabled={loading} className="bg-white text-black font-bold py-2 px-4 rounded hover:bg-gray-600 w-full">
+            {loading ? "Signing In..." : "Sign In"}
+            </button>
+          </form>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
             <Link href="/signup" className="underline text-primary">

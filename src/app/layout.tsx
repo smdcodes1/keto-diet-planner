@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/lib/firebase/auth";
 import { Toaster } from "@/components/ui/toaster";
+import { FirebaseProvider } from "@/lib/firebase/firebaseContext";
 
 export const metadata: Metadata = {
   title: "KetoPilot",
@@ -29,8 +30,10 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <AuthProvider>
-          {children}
-          <Toaster />
+          <FirebaseProvider>
+            {children}
+            <Toaster />
+          </FirebaseProvider>
         </AuthProvider>
       </body>
     </html>
